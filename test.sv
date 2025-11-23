@@ -1,3 +1,4 @@
+// Update the base test to include virtual sequencer
 class uart_base_test extends uvm_test;
     `uvm_component_utils(uart_base_test)
     
@@ -36,9 +37,11 @@ class uart_base_test extends uvm_test;
         
         if (svr.get_severity_count(UVM_FATAL) + 
             svr.get_severity_count(UVM_ERROR) == 0) begin
-            `uvm_info("TEST", "** TEST PASSED **", UVM_NONE)
+            `uvm_info("TEST", $sformatf("** TEST PASSED ** - Coverage: %0.2f%%", 
+                       env.coverage.uart_cg.get_inst_coverage()), UVM_NONE)
         end else begin
-            `uvm_info("TEST", "** TEST FAILED **", UVM_NONE)
+            `uvm_error("TEST", $sformatf("** TEST FAILED ** - Errors: %0d", 
+                       svr.get_severity_count(UVM_ERROR)))
         end
     endfunction
 endclass
